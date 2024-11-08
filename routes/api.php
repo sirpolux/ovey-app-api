@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClientController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Client;
@@ -9,6 +10,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::get('/products', function(){
-    return Client::all();
-});
+Route::resource('clients', ClientController::class);
+
+// Route::get('/clients', [ClientController::class, 'index']);
+// Route::post('/clients',[ClientController::class, 'store']);
