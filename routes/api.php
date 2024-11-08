@@ -11,6 +11,13 @@ Route::get('/user', function (Request $request) {
 
 
 Route::resource('clients', ClientController::class);
+Route::get('/clients/search/{keyword}', [ClientController::class, 'search']);
+
+Route::group(['middleware'=>['auth:sanctum']], function(){
+    Route::get('/clients/search/{keyword}', [ClientController::class, 'search']);
+    
+});
+
 
 // Route::get('/clients', [ClientController::class, 'index']);
 // Route::post('/clients',[ClientController::class, 'store']);

@@ -65,6 +65,20 @@ class ClientController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Client::destroy($id);
+        return "Client data successfully deleted";
+    }
+
+
+
+      /**
+     * Search for the specified resource in storage.
+     */
+    public function search($keyword)
+    {
+        $data =Client::where('name', 'like', '%'.$keyword.'%')
+                    ->orWhere('card_no', 'like', '%'.$keyword.'%')
+                    ->orWhere('phone_number', 'like', '%'.$keyword.'%')->get();
+        return $data;
     }
 }
