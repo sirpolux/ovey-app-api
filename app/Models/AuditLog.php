@@ -4,10 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Account extends Model
+class AuditLog extends Model
 {
     //
-    protected $fillable=[
-        'client_id'
-    ];
 }

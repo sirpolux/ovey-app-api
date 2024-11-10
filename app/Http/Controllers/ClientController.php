@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\Client;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use App\Models\Account;
 
 class ClientController extends Controller
 {
@@ -21,7 +24,7 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
         $data= $request->validate([
             'name'=>['required'],
             'card_no'=>['required', Rule::unique(Client::class, 'card_no')],
@@ -29,7 +32,15 @@ class ClientController extends Controller
             "address"=>['max:255']
         ]);
 
-        return Client::create($data);
+        $data['created_by'] = Auth::id();
+        $client = Client::create($data);
+
+        $account = Account::create(attributes: [
+            'client_id'=>$client->id,
+        ]);
+        
+        //Create Account 
+        return response($client, 200);
     }
 
     /**

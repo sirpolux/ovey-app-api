@@ -9,13 +9,16 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+//Route::resource('clients', ClientController::class);
 
-Route::resource('clients', ClientController::class);
 Route::get('/clients/search/{keyword}', [ClientController::class, 'search']);
 
 Route::group(['middleware'=>['auth:sanctum']], function(){
     Route::get('/clients/search/{keyword}', [ClientController::class, 'search']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
+    Route::post('/clients', [ClientController::class, 'store']);
+
+    
     
 });
 

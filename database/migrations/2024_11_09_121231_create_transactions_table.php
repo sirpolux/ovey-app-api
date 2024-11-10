@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId("account_id")->constrained("accounts");
             $table->double("amount");
-            $table->date("date_paid");
-            $table->string("transaction_type");
-            $table->string("purpose");
-            $table->string("status");
+            $table->date("date_paid")->default(date('Y-m-d'));
+            $table->string("transaction_type")->default("credit");
+            $table->string("purpose")->default("daily_contribution");
+            $table->string("status")->default("completed");
             $table->foreignId("created_by")->constrained("users");
             $table->timestamps();
         });

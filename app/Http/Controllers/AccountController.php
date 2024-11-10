@@ -23,7 +23,15 @@ class AccountController extends Controller
     {
         //
         $account = Account::create([
-            'client_id'=>$client->id
+            'client_id'=>$client->id,
+        ]);
+    }
+
+
+    public function createAccount(Client $client)
+    {
+        $account = Account::create(attributes: [
+            'client_id'=>$client->id,
         ]);
     }
 

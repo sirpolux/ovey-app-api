@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('audit_log', function (Blueprint $table) {
             $table->id();
-            $table->string(column: "name");
-            $table->string(column: "address")->nullable();
-            $table->string("card_no");
-            $table->string("phone_number");
-            $table->foreignId('created_by')->constrained('users');
+            $table->string('action');
+            $table->foreignId('action_by')->constrained('users');
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('audit_log');
     }
 };

@@ -12,6 +12,7 @@ class Client extends Model
         'name',
         'card_no',
         'phone_number',
-        'address'
+        'address',
+        'created_by'
     ];
 }
