@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Tools\Utility;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Account;
+use App\Models\Client;
 
 class TransactionController extends Controller
 {
@@ -30,10 +31,14 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
         //
-        $transaction = $request->validate([
+        $request->validate([
             'amount'=>'required',
-            'account_id'=>'required'
+            'client_id'=>'required'
         ]);
+
+        $client = Client::find($request->client_id);
+
+
         $transaction['account_id']=$request->account_id;
         $transaction['amount'] = $request->amount;
         $transaction['date_paid'] = isset($request['date_paid'])? $request->date_paid : date('Y-m-d');
@@ -47,6 +52,10 @@ class TransactionController extends Controller
         $transactionResponse = Transaction::create($transaction);
         $account->acount_balance = $account->account_balance+$transactionResponse->amount;
         $updatedAccount =  $account->update($account);
+        return response(
+            $updatedAccount,
+            201
+        );
 
 
         
