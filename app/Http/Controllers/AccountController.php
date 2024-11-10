@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
+use App\Models\Client;
 use Illuminate\Http\Request;
 
 class AccountController extends Controller
@@ -17,10 +19,15 @@ class AccountController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Client $client)
     {
         //
+        $account = Account::create([
+            'client_id'=>$client->id
+        ]);
     }
+
+    
 
     /**
      * Display the specified resource.

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
-            $table->decimal('account_balance', 9,2);
-            $table->string("account_type");
+            $table->decimal('account_balance', 9,2)->default(0)->nullable();
+            $table->string("account_type")->default("savings")->nullable();
             $table->foreignId("client_id")->constrained("clients");
             $table->timestamps();
         });
