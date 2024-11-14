@@ -19,11 +19,13 @@ Route::group(['middleware'=>['auth:sanctum']], function(){
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::post('/clients', [ClientController::class, 'store']);
     Route::post('/transactions', [TransactionController::class, 'store']);
+    Route::get('/clients', [ClientController::class, 'index']);
+
 
     
     
 });
-
+Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/register', [AuthController::class, 'register']);
 
 

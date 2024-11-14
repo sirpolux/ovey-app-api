@@ -32,28 +32,31 @@ class TransactionController extends Controller
     {
         //
         $request->validate([
-            'amount'=>'required',
+            'amount'=>'required|integer:100,100000',
             'client_id'=>'required'
         ]);
 
-        $client = Client::find($request->client_id);
-
-
-        $transaction['account_id']=$request->account_id;
+        //$client = Client::find($request->client_id);
+        $account = Account::where('client_id', $request['client_id'])->first();
+        $transaction['account_id']=$account->id;
         $transaction['amount'] = $request->amount;
         $transaction['date_paid'] = isset($request['date_paid'])? $request->date_paid : date('Y-m-d');
         isset($request['transaction_type']) && $transaction['transaction_type'];
         isset($request['purpose']) &&  $transaction['purpose']= $request['purpose'];
         $transaction['created_by'] = Auth::id();
-        $account = Account::find($request['account_id']);
+      
         if(!$account){
             return response("Operation failed, Account not found", 402);
         }
+    
         $transactionResponse = Transaction::create($transaction);
-        $account->acount_balance = $account->account_balance+$transactionResponse->amount;
-        $updatedAccount =  $account->update($account);
+        $account->account_balance = $account->account_balance+$transactionResponse->amount;
+        $updatedAccount =  $account->update([
+            'account_balance'=>$account->account_balance
+        ]);
         return response(
-            $updatedAccount,
+            ["message"=>"Transaction Completer",
+                    "account_balance"=>$account->account_balance],
             201
         );
 
