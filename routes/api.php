@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\TransactionController;
@@ -19,8 +20,13 @@ Route::group(['middleware'=>['auth:sanctum']], function(){
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::post('/clients', [ClientController::class, 'store']);
     Route::post('/transactions', [TransactionController::class, 'store']);
-    Route::get('/clients', [ClientController::class, 'index']);
+    Route::get('/transactions', [TransactionController::class, 'index']);
 
+    Route::get('/clients', [ClientController::class, 'index']);
+    Route::post('transactions/bulk', [TransactionController::class, 'storeMultipleTransaction']);
+    Route::get('/transactions/client', [TransactionController::class, 'getUserTransaction']);
+
+    Route::get('/accounts',[AccountController::class, 'index']);
 
     
     
