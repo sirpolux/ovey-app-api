@@ -33,7 +33,7 @@ class TransactionController extends Controller
         
         $query = Transaction::query();
         if ($request->has('search')) {
-            $search = $request->input('search');
+            $search = $request->input(key: 'search');
             $query->where('purpose', 'LIKE', "%$search%")
                   ->orWhere('transaction_type', 'LIKE', "%$search%")
                   ->orWhere('status', 'LIKE', "%$search%");
