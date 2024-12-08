@@ -16,20 +16,28 @@ Route::get('/user', function (Request $request) {
 Route::get('/clients/search/{keyword}', [ClientController::class, 'search']);
 
 Route::group(['middleware'=>['auth:sanctum']], function(){
+
     Route::get('/clients/search/{keyword}', [ClientController::class, 'search']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::post('/clients', [ClientController::class, 'store']);
     Route::post('/transactions', [TransactionController::class, 'store']);
-    Route::get('/transactions', [TransactionController::class, 'index']);
+    Route::post('/transactions/client/debit', [TransactionController::class, 'debit']);
 
+
+    Route::post('/transactions/card-no',[TransactionController::class, 'saveTransactionByCardNo']);
+    Route::get('/transactions', [TransactionController::class, 'index']);
     Route::get('/clients', [ClientController::class, 'index']);
+  
+    Route::get('/accounts',[AccountController::class, 'index']);
+    Route::get('/clients/client-no/{card_no}', [ClientController::class, 'findByCardNo']);
+
+
     Route::post('transactions/bulk', [TransactionController::class, 'storeMultipleTransaction']);
     Route::get('/transactions/client', [TransactionController::class, 'getUserTransaction']);
+    Route::get('/transactions/client/first/{client_id}', [TransactionController::class, 'getUserTransactionHome']);
+   // Route::put('/transactions/client/debit', [TransactionController::class, 'debit']);
 
-    Route::get('/accounts',[AccountController::class, 'index']);
 
-    
-    
 });
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/register', [AuthController::class, 'register']);

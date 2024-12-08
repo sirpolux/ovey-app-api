@@ -14,9 +14,62 @@ class ClientController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Client::all();
+        $request->validate([
+            'search'=>'nullable|string',
+            'sort_by'=>'nullable|string|in:id,name,card_no',
+            'sort_order'=>'nullable|string|in:asc,desc',
+            'per_page'=> 'nullable|integer|min:1|max:100',
+            'page'=>'nullable|integer:min:1'
+        ]);
+
+        $query=Client::query();
+        if($request->has('search')){
+            $search = $request->input(key:'search');
+            $query->where('name', 'LIKE',"%$search%")
+            ->orWhere('card_no', 'LIKE', "%$search%");
+        }
+          // Sorting
+          $sortBy = $request->input('sort_by', 'id'); // Default sort by 'id'
+          $sortOrder = $request->input('sort_order', 'desc'); // Default sort order 'asc'
+          $query->orderBy($sortBy, $sortOrder);
+      
+          // Pagination
+          $perPage = $request->input('per_page', 20); // Default 20 items per page
+          $clients = $query->paginate($perPage);
+          $data = $clients->items();
+          $clients_data= [];
+        //   'name',
+        //   'card_no',
+        //   'phone_number',
+        //   'address',
+        //   'created_by'
+
+          foreach($data as $client_transaction){
+            $account = Account::where('client_id', $client_transaction->id)->first();
+            $current_client =[
+                'name'=>$client_transaction->name,
+                'client_id'=>$client_transaction->id,
+                'card_no'=>$client_transaction->card_no,
+                'phone_number'=>$client_transaction->phone_number,
+                'created_on'=>$client_transaction->created_at,
+                'balance'=>$account->account_balance
+            ];
+            array_push($clients_data, $current_client);
+          }
+
+          return response()->json([
+            'data' => $clients_data,
+            'pagination'=>[
+                'total' => $clients->total(),
+                'per_page' => $clients->perPage(),
+                'current_page' => $clients->currentPage(),
+                'last_page' => $clients->lastPage(),
+                'next_page_url' => $clients->nextPageUrl(),
+                'prev_page_url' => $clients->previousPageUrl(),
+            ]
+          ]);
     }
 
     /**
@@ -50,6 +103,22 @@ class ClientController extends Controller
     {
         return Client::find($id);
         //
+    }
+
+
+    public function findByCardNo(string $card_no){
+        $client = Client::where('card_no', $card_no)->first();
+        if($client){
+            return response([
+                "name"=>$client->name,
+                "status"=>true,
+                "msg"=>"User found"
+            ]);
+        }
+        return response([
+            "status"=>false,
+            "msg"=>"No user found"
+        ]);
     }
 
     /**
