@@ -15,6 +15,11 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/clients/search/{keyword}', [ClientController::class, 'search']);
 
+
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
 Route::group(['middleware'=>['auth:sanctum']], function(){
 
     Route::get('/clients/search/{keyword}', [ClientController::class, 'search']);
@@ -41,6 +46,10 @@ Route::group(['middleware'=>['auth:sanctum']], function(){
 });
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/register', [AuthController::class, 'register']);
+Route::get
+('/test', function(){
+    return "connecte to apis";
+});
 
 
 // Route::get('/clients', [ClientController::class, 'index']);

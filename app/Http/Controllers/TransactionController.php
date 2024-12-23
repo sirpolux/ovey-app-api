@@ -62,6 +62,7 @@ class TransactionController extends Controller
                 'amount'=>$user_transaction->amount,
                 'date_paid'=>$user_transaction->date_paid,
                 'transaction_type'=>$user_transaction->transaction_type,
+                'transaction_id'=>$user_transaction->id,
                 'purpose'=>$user_transaction->purpose,
             ];
             array_push($transaction_response, $current_transaction);
