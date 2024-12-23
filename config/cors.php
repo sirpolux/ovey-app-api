@@ -15,11 +15,11 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['*'],
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://www.oveysaving.com.ng'],
+    'allowed_origins' => [env('FRONT_END_URL', 'http://localhost:4200')],
 
     'allowed_origins_patterns' => [],
 
